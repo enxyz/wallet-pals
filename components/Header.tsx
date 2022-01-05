@@ -13,7 +13,7 @@ const web3Styles = {
   color: 'accent',
   opacity: 1,
   '@media screen and (prefers-reduced-motion: no-preference)': {
-    animation: `${fadeInfadeOut} 2.5s ease-in-out infinite`,
+    animation: `${fadeInfadeOut} 2.5s ease-in-out`,
   },
 };
 
