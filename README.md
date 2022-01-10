@@ -1,84 +1,38 @@
 # wallet-pals
 
-look for shared tokens among wallets aka facebook you both liked token x!
+### Facebook shared likes for web 3.
 
-Based on https://github.com/nickytonline/web3-starter
+Check two wallets for shared tokens. If you share tokens 🙌 you might share
+interests 🍻 and you might be(come) friends 🚀
 
-## References
+## Quickstart
 
-https://docs.alchemy.com/alchemy/tutorials/simple-web3-script
-https://ethereum.org/en/developers/docs/nodes-and-clients/nodes-as-a-service/
-
-## Run
-
-Start project, open http://localhost:3000/main in browser and check console.
-
-## Getting Started
-
-1. Install dependencies
-
-   ```bash
-   yarn install
-   ```
-
-1. Add secrets
-
-   `./_secrets/wallets.js`
-
-1. Run locally
-
-   ```bash
-   yarn dev
-   ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the
-result.
-
-## Running tests
-
-The project uses [jest](https://jestjs.io). For more information on jest, see
-the [official documentation](https://jestjs.io/docs/getting-started).
-
-To run tests:
+Set wallets to check in `./pages/main.js/walletAddresses`
 
 ```bash
-npm test
-# or
-yarn test
+yarn install
+yarn dev
 ```
 
-To run tests in watch mode:
+Open a browser to http://localhost:3000/main
 
-```bash
-npm test:watch
-# or
-yarn test:watch
-```
+## Output Examples
 
-## Building out components
+No matches
 
-When building out components in the project, shared components can go in the
-`components` folder. Components can then be imported using the `@components`
-alias, e.g. `import { ExampleHeader } from '@components/Header';`.
+![Screenshot of result with no matches](assets/none.png)
 
-### Storybook
+One match
 
-The project uses [Storybook](https://storybook.js.org) for building our
-components. For more on Storybook, see the
-[official documentation](https://storybook.js.org/docs/react).
+![Screenshot of result with one matche](assets/one.png)
 
-### Running Storybook
+Many matches (PR to add delimiters welcome!)
 
-```bash
-npm run storybook
-# or
-yarn storybook
-```
+![Screenshot of result with many matches](assets/many.png)
 
-### Building Storybook Static Site
+## Contributing/forking
 
-```bash
-npm run build-storybook
-# or
-yarn build-storybook
-```
+Contributions, comments, etc. welcome! This is an alpha proof of concept just to
+see if it's fun or something more meaningful can be built on top.
+
+See https://github.com/enxyz/wallet-pals

@@ -13,9 +13,10 @@ import { erc20AbiJson } from '../contracts/json-interfaces.js';
 import { tokens } from '../contracts/addresses.js';
 
 const walletAddresses = [
-  // '0x7D25CB84CdfBDAF9A35dF24Be0a854E4D9d96f9d', // MM_main
-  'cameron.eth',
-  'huh.eth',
+  '0x7D25CB84CdfBDAF9A35dF24Be0a854E4D9d96f9d', // MM_main
+  // 'cameron.eth',
+  'davidh.eth',
+  // 'huh.eth',
 ];
 
 async function _getTokens(walletAddress) {
@@ -64,14 +65,25 @@ function compareWallets(_walletBalances) {
   return sharedTokens;
 }
 
+// log to console; display via Main
 function displayResults(wallets, sharedTokens) {
   console.log(wallets);
   console.log('shared the following tokens');
   console.log(sharedTokens);
 }
 
-function Main() {
-  return <div>Check console</div>;
+function main() {
+  var text = 'Checking wallets...';
+  var to_return =
+    ((<div>{text}</div>),
+    (<div>Shared interest!</div>),
+    (
+      <div>
+        both {walletAddresses[0]} and {walletAddresses[1]} share{' '}
+      </div>
+    ),
+    (<div>{JSON.stringify(sharedTokens)}!!!!!!!!!!!!</div>));
+  return to_return;
 }
 
 console.log('script');
@@ -80,4 +92,45 @@ console.log(walletBalances); // debug
 var sharedTokens = compareWallets(walletBalances);
 displayResults(walletAddresses, sharedTokens);
 
-export default Main;
+export default function Main() {
+  var to_return = (
+    <>
+      <title>wallet-pals</title>
+      <p></p>
+      <p></p>
+      <br></br>
+      <hr></hr>
+      <br></br>
+      <div></div>
+      <div>Hey wallet pals!!</div>
+      <div>
+        both {walletAddresses[0]} and {walletAddresses[1]} share{' '}
+        {sharedTokens.size} tokens!!!!{' '}
+      </div>
+      <div>{sharedTokens}!!!!!!!!!!!!</div>
+    </>
+  );
+  if (sharedTokens.size === 0) {
+    to_return = (
+      <>
+        <html>
+          <body>
+            <title>wallet-pals</title>
+            <p></p>
+            <div>
+              Sorry, the wallets {walletAddresses[0]} and {walletAddresses[1]}{' '}
+              share no tokens....
+            </div>
+            <div>
+              <p>So you may not have any interests in common......</p>
+              Then again, maybe try sharing and you&apos;ll find common ground!
+              :)<p></p>
+              <div>Or, try sharing a 🍔, 🍺, 🎵, 🌎, cause 🤷🏻</div>
+            </div>
+          </body>
+        </html>
+      </>
+    );
+  }
+  return to_return;
+}
