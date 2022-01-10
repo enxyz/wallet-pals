@@ -23,7 +23,7 @@ Start project, open http://localhost:3000/main in browser and check console.
 
 1. Add secrets
 
-   `./_secrets/wallets.ts`
+   `./_secrets/wallets.js`
 
 1. Run locally
 
