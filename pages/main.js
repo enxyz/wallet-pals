@@ -50,9 +50,11 @@ async function getTokenBalances(_walletAddresses) {
 function compareWallets(_walletBalances) {
   console.log('compareWallets');
   var allTokens = new Set();
-  tokens.forEach(function (tokenAddress, tokenName) {
-    allTokens.add(tokenName);
-  });
+  for (const [address, balances] of _walletBalances) {
+    for (const [token, balance] of balances) {
+      allTokens.add(token);
+    }
+  }
   var sharedTokens = allTokens;
   _walletBalances.forEach(function (balances, wallet) {
     sharedTokens.forEach(function (token) {
