@@ -12,12 +12,12 @@ export const defaultWallet = {
   address: '',
 };
 
-type LFGContextType = {
+type ContextType = {
   wallet: Wallet;
   setWallet: (wallet: Wallet) => void;
 };
 
-export const LFGContext = React.createContext<LFGContextType>({
+export const Context = React.createContext<ContextType>({
   wallet: defaultWallet,
   setWallet: () => console.warn('no wallet provider'),
 });

@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import { useContext } from 'react';
-import { LFGContext } from '../Context';
+import { Context } from '../Context';
 
 const Navbar: React.FC = () => {
-  const context = useContext(LFGContext);
 
   return (
     <nav className="flex items-center space-between flex-wrap pt-3 pb-12 mx-12">

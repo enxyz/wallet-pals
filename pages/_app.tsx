@@ -1,15 +1,14 @@
-import { useContext, useState } from 'react';
-import '../styles/globals.css';
+import { useState } from 'react';
 import type { AppProps } from 'next/app';
-import { defaultWallet, LFGContext, Wallet } from '../Context';
+import '../styles/globals.css';
+import { defaultWallet, Context, Wallet } from '../Context';
 import Layout from '../components/Layout';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [wallet, setWallet] = useState<Wallet>(defaultWallet);
-  const context = useContext(LFGContext);
 
   return (
-    <LFGContext.Provider
+    <Context.Provider
       value={{
         wallet,
         setWallet,
@@ -18,7 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Layout>
         <Component {...pageProps} />
       </Layout>
-    </LFGContext.Provider>
+    </Context.Provider>
   );
 }
 

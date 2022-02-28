@@ -8,18 +8,14 @@ import Label from '../components/Label';
 import Title from '../components/Title';
 import {
   getSharedTokens,
-  getTokenSymbolsInWallet,
 } from '../utils/checkWallets';
-import { Token } from '../types/types';
 
 const Home: NextPage = () => {
   const [walletAddresses, setWalletAddresses] = useState<string>();
   const [buttonStatus, setButtonStatus] = useState('Check Wallets');
-  const [tokens, setTokens] = useState('Check Wallets');
-  const [sharedTokens, setSharedTokens] = useState('None found');
+  const [sharedTokens, setSharedTokens] = useState(['None found']);
 
   const addressesInputVerificationWithUI = () => {
-    console.info('addressesInputVerificationWithUI');
     if (!walletAddresses) {
       alert('Input addresses to check');
       return false;
@@ -42,30 +38,17 @@ const Home: NextPage = () => {
       }
     });
     setButtonStatus('Checking...');
-    console.info('addresses');
-    console.info(addresses);
     return addresses;
   };
 
   const buttonPressed = async () => {
-    console.log('buttonPressed');
-
     const addresses = addressesInputVerificationWithUI();
     if (!addresses) return;
-    const sharedTokens = await getSharedTokens(addresses);
-    setSharedTokens(sharedTokens);
-    setButtonStatus('Checked');
-
-    console.log(sharedTokens);
-
-    if (sharedTokens && sharedTokens.length > 0) {
-      console.log('result happy');
-      console.log(sharedTokens);
-      console.log(sharedTokens.length > 0);
-    } else {
-      console.log('result sorry');
-      console.log(sharedTokens);
+    const sharedTokens = await getSharedTokens(addresses, setSharedTokens);
+    if (sharedTokens) {
+      setSharedTokens(sharedTokens);
     }
+    setButtonStatus('Checked');
   };
 
   return (
@@ -96,7 +79,7 @@ const Home: NextPage = () => {
           <div className="mb-3">
             <Title>Shared Tokens</Title>
           </div>
-          <p className="text-sm">{sharedTokens}</p>
+          <p className="text-sm">{sharedTokens.map(token => <li>{token}</li>)}</p>
         </div>
       </div>
     </div>
