@@ -13,20 +13,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "jsxImportSource": "theme-ui",
-    "baseUrl": ".",
-    "paths": {
-      "@components": ["components/index"],
-      "@components/*": ["components/*"]
-    }
+    "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"],
-  "ts-node": {
-    // these options are overrides used only by ts-node
-    // same as our --compilerOptions flag and our TS_NODE_COMPILER_OPTIONS environment variable
-    "compilerOptions": {
-      "module": "commonjs"
-    }
-  }
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/main.js"],
+  "exclude": ["node_modules"]
 }

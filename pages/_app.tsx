@@ -1,15 +1,25 @@
+import { useContext, useState } from 'react';
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { ThemeProvider } from 'theme-ui';
-import { defaultTheme } from '../themes/defaultTheme';
+import { defaultWallet, LFGContext, Wallet } from '../Context';
+import Layout from '../components/Layout';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [wallet, setWallet] = useState<Wallet>(defaultWallet);
+  const context = useContext(LFGContext);
+
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <div sx={{ display: 'grid', placeItems: 'center' }}>
-        <Component {...pageProps} />{' '}
-      </div>
-    </ThemeProvider>
+    <LFGContext.Provider
+      value={{
+        wallet,
+        setWallet,
+      }}
+    >
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </LFGContext.Provider>
   );
 }
+
 export default MyApp;
