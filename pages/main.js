@@ -1,138 +1,56 @@
-// MVP check wallets by hand with
-// https://etherscan.io/tokenholdings?a=[0x123...789xyz]
-//
+// Get count of a token in wallets
 
 var ethereum_mainnet_rpc =
   'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
-
 var Web3 = require('web3');
 const web3 = new Web3(Web3.givenProvider || ethereum_mainnet_rpc);
 const ens = web3.eth.ens;
-
 import { erc20AbiJson } from '../contracts/json-interfaces.js';
-import { tokens } from '../contracts/addresses.js';
+import { wallets } from '../contracts/wallets.js';
 
-const walletAddresses = [
-  '0x7D25CB84CdfBDAF9A35dF24Be0a854E4D9d96f9d', // MM_main
-  // 'cameron.eth',
-  'davidh.eth',
-  // 'huh.eth',
-];
+// $ORANGE
+// https://etherscan.io/token/0x1bBD79f1Ecb3f2cCC586A5E3A26eE1d1D2E1991f
+export const token = '0x1bBD79f1Ecb3f2cCC586A5E3A26eE1d1D2E1991f';
 
-async function _getTokens(walletAddress) {
-  const tokenBalances = new Map();
-  var ethBalance = await web3.eth.getBalance(walletAddress);
-  ethBalance = web3.utils.fromWei(ethBalance, 'ether');
-  tokenBalances.set('ETH', ethBalance);
-  // TODO: put decimal in correct place for these too
-  for (const [name, tokenAddress] of tokens) {
-    const contract = new web3.eth.Contract(erc20AbiJson, tokenAddress);
-    const tokenBalance = await contract.methods.balanceOf(walletAddress).call();
-    tokenBalances.set(name, tokenBalance);
+async function handleEnsAddresses(wallet) {
+  var resolvedAddress = wallet;
+  // check for '.' not '.eth' per https://docs.ens.domains/dapp-developer-guide/resolving-names
+  if (wallet.includes('.')) {
+    resolvedAddress = await ens.getAddress(wallet);
   }
-  return tokenBalances;
+  return resolvedAddress;
 }
 
-async function getTokenBalances(_walletAddresses) {
-  const walletBalances = new Map();
-  for (const address of _walletAddresses) {
-    var resolved_address = address; // allow for ens names like 'cam.eth'
-    // check for '.' not '.eth' per https://docs.ens.domains/dapp-developer-guide/resolving-names
-    if (address.includes('.')) {
-      resolved_address = await ens.getAddress(address);
-    }
-    const balances = await _getTokens(resolved_address);
-    walletBalances.set(address, balances);
-  }
-  return walletBalances;
-}
-
-function compareWallets(_walletBalances) {
-  console.log('compareWallets');
-  var allTokens = new Set();
-  for (const [address, balances] of _walletBalances) {
-    for (const [token, balance] of balances) {
-      allTokens.add(token);
-    }
-  }
-  var sharedTokens = allTokens;
-  _walletBalances.forEach(function (balances, wallet) {
-    sharedTokens.forEach(function (token) {
-      const balance = balances.get(token);
-      if (balance <= 0) {
-        sharedTokens.delete(token);
-      }
-    });
-  });
-  return sharedTokens;
-}
-
-// log to console; display via Main
-function displayResults(wallets, sharedTokens) {
-  console.log(wallets);
-  console.log('shared the following tokens');
-  console.log(sharedTokens);
-}
-
-function main() {
-  var text = 'Checking wallets...';
-  var to_return =
-    ((<div>{text}</div>),
-    (<div>Shared interest!</div>),
-    (
-      <div>
-        both {walletAddresses[0]} and {walletAddresses[1]} share{' '}
-      </div>
-    ),
-    (<div>{JSON.stringify(sharedTokens)}!!!!!!!!!!!!</div>));
-  return to_return;
-}
-
-console.log('script');
-var walletBalances = await getTokenBalances(walletAddresses);
-console.log(walletBalances); // debug
-var sharedTokens = compareWallets(walletBalances);
-displayResults(walletAddresses, sharedTokens);
-
-export default function Main() {
-  var to_return = (
-    <>
-      <title>wallet-pals</title>
-      <p></p>
-      <p></p>
-      <br></br>
-      <hr></hr>
-      <br></br>
-      <div></div>
-      <div>Hey wallet pals!!</div>
-      <div>
-        both {walletAddresses[0]} and {walletAddresses[1]} share{' '}
-        {sharedTokens.size} tokens!!!!{' '}
-      </div>
-      <div>{sharedTokens}!!!!!!!!!!!!</div>
-    </>
+// Given a token address and a list of wallets...
+// return a map of token address to count of token
+async function getTokenQuantity(wallets, token) {
+  const contract = new web3.eth.Contract(erc20AbiJson, token);
+  const tokensInWallets = new Array();
+  await Promise.all(
+    wallets.map(async (wallet) => {
+      const resolvedAddress = await handleEnsAddresses(wallet);
+      const tokenBalance = await contract.methods
+        .balanceOf(resolvedAddress)
+        .call();
+      const tokenInWallet = new Object();
+      tokenInWallet.wallet = wallet;
+      tokenInWallet.tokenBalance = tokenBalance;
+      tokensInWallets.push(tokenInWallet);
+    }),
   );
-  if (sharedTokens.size === 0) {
-    to_return = (
-      <>
-        <html>
-          <body>
-            <title>wallet-pals</title>
-            <p></p>
-            <div>
-              Sorry, the wallets {walletAddresses[0]} and {walletAddresses[1]}{' '}
-              share no tokens....
-            </div>
-            <div>
-              <p>So you may not have any interests in common......</p>
-              Then again, maybe try sharing and you&apos;ll find common ground!
-              :)<p></p>
-              <div>Or, try sharing a 🍔, 🍺, 🎵, 🌎, cause 🤷🏻</div>
-            </div>
-          </body>
-        </html>
-      </>
-    );
-  }
-  return to_return;
+  return tokensInWallets;
+}
+
+async function main() {
+  const tokensInWallets = await getTokenQuantity(wallets, token);
+  console.log('\n\n');
+  console.log(JSON.stringify(tokensInWallets));
+  console.log('\n\n');
+}
+
+await main();
+
+// so website loads
+export default function Main() {
+  return <title>wallet-pals</title>;
 }

@@ -1,0 +1,2 @@
+// 'orange': '0x1bBD79f1Ecb3f2cCC586A5E3A26eE1d1D2E1991f';
+export const token = '0x1bBD79f1Ecb3f2cCC586A5E3A26eE1d1D2E1991f';
